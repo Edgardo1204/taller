@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../templates/navbar.xhtml">
+
+            <ui:define name="content">
+                <div class="container">
+                    <f:view>
+
+
+                        <h:form styleClass="form-container">
+                            <h1><h:outputText value="Agregar Producto o Servicio"/></h1>
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Categoría:" for="categoria" />
+                                <p:selectOneMenu id="categoria" 
+                                                 value="#{aDInventaro.inventario.categoria}" 
+                                                 required="true" 
+                                                 requiredMessage="Debe seleccionar una categoría">
+                                    <f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+                                    <f:selectItem itemLabel="Producto" itemValue="PRODUCTO" />
+                                    <f:selectItem itemLabel="Servicio" itemValue="SERVICIO" />
+                                    <p:ajax update="@form" listener="#{aDInventaro.actualizarCampos}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Nombre:" for="nombre" />
+                                <p:inputText id="nombre" value="#{aDInventaro.inventario.nombre}" title="Nombre" required="true" requiredMessage="El nombre es obligatorio"/>
+
+                                <p:outputLabel value="PrecioCompra:" for="precioCompra" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputNumber id="precioCompra" value="#{aDInventaro.inventario.precioCompra}" title="PrecioCompra" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:outputLabel value="PrecioVenta:" for="precioVenta" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputText id="precioVenta" value="#{aDInventaro.inventario.precioVenta}" title="PrecioVenta" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:outputLabel value="Descripcion:" for="descripcion" />
+                                <p:inputText id="descripcion" value="#{aDInventaro.inventario.descripcion}" title="Descripcion" />
+                                <p:outputLabel value="Cantidad:" for="cantidad" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputText id="cantidad" value="#{aDInventaro.inventario.cantidad}" title="Cantidad" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:outputLabel value="Marca:" for="marca" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputText id="marca" value="#{aDInventaro.inventario.marca}" title="Marca" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+
+                            </p:panelGrid>
+                            <div class="button-container">
+                                <p:commandButton value="Agregar Producto" 
+                                                 action="#{aDInventaro.agregarInventario}" 
+                                                 styleClass="btn"
+                                                 update="@form"
+                                                 oncomplete="if (!args.validationFailed) PF('registroDialog').show();"/>
+                            </div>
+                            <p:messages showDetail="true" showIcon="true" closable="true"/>
+                            <p:dialog header="Resultado" widgetVar="registroDialog" modal="true" resizable="false">
+                                <h:outputText value="#{aDInventaro.mensajeRegistro}" />
+                                <p:commandButton value="Aceptar" onclick="PF('registroDialog').hide();" type="button" />
+                            </p:dialog>
+                        </h:form>
+
+
+
+
+
+                        <!-- Tabla para listar productos -->
+                        <h:form styleClass="table-container">
+                            <h1><h:outputText value="Lista de Productos"/></h1>
+                            <p:dataTable value="#{aDInventaro.inventarios}" var="item" id="tablaInventario">
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{item.id}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{item.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Precio de Compra">
+                                    <h:outputText value="#{item.precioCompra}"/>
+                                </p:column>
+                                <p:column headerText="Precio de Venta">
+                                    <h:outputText value="#{item.precioVenta}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <h:outputText value="#{item.descripcion}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{item.cantidad}"/>
+                                </p:column>
+                                <p:column headerText="Marca">
+                                    <h:outputText value="#{item.marca}"/>
+                                </p:column>
+                                <p:column headerText="Categoria">
+                                    <h:outputText value="#{item.categoria}"/>
+                                </p:column>
+                                <p:column headerText="Acciones">
+                                    <p:commandButton value="Eliminar" icon="pi pi-trash" action="#{aDInventaro.eliminarInventario(item)}" styleClass="btn-danger" />
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </f:view>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

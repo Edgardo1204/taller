@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../templates/navbar.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="card">
+                        <h:form id="form">
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <p:wizard flowListener="#{aDClientes.onFlowProcess}">
+                                <!-- Pestaña de Cliente -->
+                                <p:tab id="cliente" title="Cliente">
+                                    <p:panel header="Datos del cliente">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <p:outputLabel value="Nombre:" for="nombre"/>
+                                            <p:autoComplete id="nombre" dropdown="true" value="#{aDClientes.nombreC}"
+                                                            completeMethod="#{aDClientes.completeText}" scrollHeight="250" required="true">
+                                                <p:ajax event="itemSelect" listener="#{aDClientes.onClienteSelect}" update="@form"/>
+                                            </p:autoComplete>
+
+                                            <h:outputText value="Apellido:"/>
+                                            <p:inputText value="#{aDClientes.cliente.apellido}" label="Apellido" disabled="true"/>
+
+                                            <h:outputText value="Teléfono:"/>
+                                            <p:inputText value="#{aDClientes.cliente.telefono}" disabled="true"/>
+
+                                            <h:outputText value="Correo:"/>
+                                            <p:inputText value="#{aDClientes.cliente.correo}" disabled="true"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <!-- Pestaña de Vehículo -->
+                                <p:tab id="vehiculo" title="Vehículo">
+                                    <p:panel header="Datos del vehículo">
+                                        <p:messages/>
+                                        <h:panelGrid id="datosVehiculo" columns="2" columnClasses="label, value">
+                                            <p:outputLabel value="Modelo:" for="modelo"/>
+                                            <h:selectOneMenu id="modelo" value="#{aDAutos.autoId}">
+                                                <f:selectItem itemLabel="-- Seleccione un vehículo --" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{aDAutos.obtenerAutosPorClienteId(aDClientes.cliente.id)}" var="auto" itemLabel="#{auto.modelo}" itemValue="#{auto.id}" />
+                                                <p:ajax event="change" listener="#{aDAutos.onAutoSelect}" update="datosVehiculo"/>
+                                            </h:selectOneMenu>
+
+                                            <p:outputLabel value="Marca:" for="marca"/>
+                                            <p:inputText id="marca" value="#{aDAutos.auto.marca}" disabled="true"/>
+
+                                            <p:outputLabel value="Año:" for="año"/>
+                                            <p:inputText id="año" value="#{aDAutos.auto.año}" disabled="true"/>
+
+                                            <p:outputLabel value="Km:" for="km"/>
+                                            <p:inputText id="km" value="#{aDAutos.auto.km}" disabled="true"/>
+
+                                            <p:outputLabel value="Color:" for="color"/>
+                                            <p:inputText id="color" value="#{aDAutos.auto.color}" disabled="true"/>
+
+                                            <p:outputLabel value="Placas:" for="placas"/>
+                                            <p:inputText id="placas" value="#{aDAutos.auto.placas}" disabled="true"/>
+
+                                            <p:outputLabel value="Vin:" for="vin"/>
+                                            <p:inputText id="vin" value="#{aDAutos.auto.vin}" disabled="true"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <!-- Pestaña de Servicio -->
+                                <p:tab id="servicio" title="Servicio a realizar">
+                                    <p:panel header="Servicios a realizar">
+                                        <p:messages id="messagesServicios"/>
+                                        <div class="card">
+                                            <h5>Seleccione los servicios</h5>
+                                            <p:dataTable id="checkboxDT" var="item" value="#{aDServicios.serviciosDisponibles}"
+                                                         selection="#{aDServicios.selectedServicios}" rowKey="#{item.id}" selectionPageOnly="false" selectionRowMode="none"
+                                                         style="margin-bottom:0" paginator="true" rows="5">
+                                                <p:column selectionBox="true" style="width:16px;text-align:center"/>
+                                                <p:column headerText="Nombre">
+                                                    <h:outputText value="#{item.nombre}" />
+                                                </p:column>
+                                                <p:column headerText="Descripción">
+                                                    <h:outputText value="#{item.descripcion}" />
+                                                </p:column>
+                                                <p:column headerText="Categoría">
+                                                    <h:outputText value="#{item.categoria}" />
+                                                </p:column>
+                                                <p:column headerText="Precio">
+                                                    <p:inputText id="precio_venta" value="#{item.precioVenta}" style="width: 50px;">
+                                                        <p:ajax event="change" process="@this" />
+                                                    </p:inputText>
+                                                </p:column>
+                                                <p:column headerText="Cantidad">
+                                                    <p:inputText id="cantidad" value="#{item.cantidad}" style="width: 50px;">
+                                                        <p:ajax event="change" process="@this" />
+                                                    </p:inputText>
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <!-- Botón para guardar selecciones -->
+                                            <p:commandButton value="Guardar Selecciones" action="#{aDServicios.guardarSelecciones}" 
+                                                             update="checkboxDT growl messagesServicios" process="checkboxDT" 
+                                                             style="margin-top: 10px;"/>
+                                        </div>
+
+                                        <h:outputText value="Observaciones" />
+                                        <p:inputText value="#{aDHojaServicio.hojaServicio.observaciones}" />
+
+                                        <p:outputLabel value="Empleado" for="empleado"/>
+                                        <h:selectOneMenu id="empleado" value="#{aDEmpleado.empleado.nombre}">
+                                            <f:selectItem itemLabel="-- Seleccione un vehículo --" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{aDEmpleado.empleados}" />
+                                        </h:selectOneMenu>
+                                    </p:panel>
+                                </p:tab>
+
+
+                                <!-- Pestaña de Confirmación -->
+                                <p:tab id="confirmacion" title="Confirmación">
+                                    <p:panel header="Confirmación">
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Folio:"/>
+                                            <h:outputText value="#{aDHojaServicio.ultimaHojaServicio}"/>
+
+                                            <h:outputText value="Cliente:"/>
+                                            <h:outputText value="#{aDClientes.cliente.nombre} #{aDClientes.cliente.apellido}"/>
+
+                                            <h:outputText value="Vehículo:"/>
+                                            <h:outputText value="#{aDAutos.auto.modelo} - #{aDAutos.auto.marca}"/>
+
+                                            <h:outputText value="Encargado:"/>
+                                            <h:outputText value="#{aDEmpleado.empleado.nombre}"/>
+
+                                            <h:outputText value="Servicios seleccionados:"/>
+                                            <h:panelGroup>
+                                                <ui:repeat value="#{aDServicios.selectedServicios}" var="servicio">
+                                                    <h:outputText value="#{servicio.nombre} (Cantidad: #{servicio.cantidad}, Precio: #{servicio.precioVenta})" /><br />
+                                                </ui:repeat>
+                                            </h:panelGroup>
+
+                                            <h:outputText value="Observaciones" />
+                                            <h:outputText value="#{aDHojaServicio.hojaServicio.observaciones}" />
+
+                                            <p:commandButton value="Confirmar" action="#{aDServicios.guardarServicio}" 
+                                                             update="growl" process="@form"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                            </p:wizard>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

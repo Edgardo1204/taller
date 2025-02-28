@@ -1,0 +1,136 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 11 feb. 2025, 13:12:14
+    Author     : Jesus
+*/
+
+.navbar {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.navbar .company-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+.navbar .user-info {
+    font-size: 16px;
+}
+.sidebar {
+    background-color: #34495e;
+    width: 180px;
+    height: 100vh;
+    position: fixed;
+    top: 55px; /* Ajusta este valor según la altura de tu navbar */
+    left: 0;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.sidebar ul li a:hover {
+    background-color: #1abc9c;
+}
+.container {
+    margin-left: 200px; /* Ajusta este valor según el ancho de tu sidebar */
+    padding: 20px;
+    margin-top: 60px; /* Ajusta este valor según la altura de tu navbar */
+}
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.btn {
+    padding: 10px 20px;
+    background-color: #218838;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn:hover {
+    background-color: #218838;
+}
+.btn-danger {
+    background-color: #dc3545;
+}
+
+button.ui-button {
+    margin-right: .5rem;
+}
+.table-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.ui-datatable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.ui-datatable th, .ui-datatable td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+.ui-datatable th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+}
+.ui-datatable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.ui-datatable tr:hover {
+    background-color: #f1f1f1;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+    }
+    .container {
+        margin-left: 0;
+        padding: 10px;
+    }
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar .company-name {
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../templates/navbar.xhtml">
+
+            <ui:define name="content">
+                <div class="container">
+                    <f:view>
+
+
+                        <h:form>
+                            <h1><h:outputText value="Auto"/></h1>
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Cliente:" for="idCliente" />
+                                <h:selectOneMenu id="idCliente" value="#{aDAutos.clienteFK}" > 
+                                    <f:selectItems value="#{aDClientes.clientes}" var="item" itemValue="#{item.id}" itemLabel="#{item.toString()}"/>
+                                </h:selectOneMenu>
+
+                                <p:outputLabel value="Año:" for="año" />
+                                <p:inputText id="año" value="#{aDAutos.auto.año}" title="Año" />
+                                <p:outputLabel value="Km:" for="km" />
+                                <p:inputText id="km" value="#{aDAutos.auto.km}" title="Km" />
+                                <p:outputLabel value="Marca:" for="marca" />
+                                <p:inputText id="marca" value="#{aDAutos.auto.marca}" title="Marca" />
+                                <p:outputLabel value="Modelo:" for="modelo" />
+                                <p:inputText id="modelo" value="#{aDAutos.auto.modelo}" title="Modelo" />
+                                <p:outputLabel value="Color:" for="color" />
+                                <p:inputText id="color" value="#{aDAutos.auto.color}" title="Color" />
+                                <p:outputLabel value="Placas:" for="placas" />
+                                <p:inputText id="placas" value="#{aDAutos.auto.placas}" title="Placas" />
+                                <p:outputLabel value="Vin:" for="vin" />
+                                <p:inputText id="vin" value="#{aDAutos.auto.vin}" title="Vin" />
+
+                            </p:panelGrid>
+                            <p:commandButton value="Agregar" action="#{aDAutos.agregarAuto(aDClientes)}" styleClass="btn" />
+
+                        </h:form>
+
+
+                        <h:form>
+                            <h1><h:outputText value="List"/></h1>
+                            <p:dataTable value="#{aDAutos.autos}" var="item">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.id}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Marca"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.marca}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Modelo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.modelo}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Año"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.año}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Color"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.color}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Placas"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.placas}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Km"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.km}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Vin"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.vin}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Estado"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.estado}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="IdCliente"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idCliente}"/>
+                                </p:column>
+                                <p:column headerText="Acciones">
+                                    <p:commandButton value="Eliminar" icon="pi pi-trash" action="#{aDAutos.eliminarAuto(item)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+
+
+
+                    </f:view>
+                </div>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../templates/navbar.xhtml">
+
+            <ui:define name="content">           
+                <div class="container">
+                    <f:view>
+                        <h:form>
+                            <h1><h:outputText value="Registrar nuevo cliente"/></h1>
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Nombre:" for="nombre" />
+                                <p:inputText id="nombre" value="#{aDClientes.cliente.nombre}" title="Nombre" />
+                                <p:outputLabel value="Apellido:" for="apellido" />
+                                <p:inputText id="apellido" value="#{aDClientes.cliente.apellido}" title="Apellido" />
+                                <p:outputLabel value="Telefono:" for="telefono" />
+                                <p:inputText id="telefono" value="#{aDClientes.cliente.telefono}" title="Telefono" />
+                                <p:outputLabel value="Correo:" for="correo" />
+                                <p:inputText id="correo" value="#{aDClientes.cliente.correo}" title="Correo" />
+                            </p:panelGrid>
+                            <div class="button-container">
+                                <p:commandButton value="Agregar Cliente" action="#{aDClientes.agregarCliente}" styleClass="btn" />
+                            </div>
+                        </h:form>
+
+
+
+                        <h:form>
+                            <h1><h:outputText value="Lista de clientes"/></h1>
+                            <p:dataTable value="#{aDClientes.clientes}" var="item">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.id}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.nombre}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Apellido"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.apellido}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Telefono"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.telefono}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Correo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.correo}"/>
+                                </p:column>
+                                <p:column headerText="Acciones">
+                                    <p:commandButton value="Eliminar" icon="pi pi-trash" action="#{aDClientes.eliminarCliente(item)}" />
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+
+                    </f:view>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
