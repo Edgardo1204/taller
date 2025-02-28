@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import modelo.Clientes;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-02-27T20:54:33", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-02-27T22:05:21", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(Autos.class)
 public class Autos_ { 
 
@@ -17,7 +17,7 @@ public class Autos_ {
     public static volatile SingularAttribute<Autos, String> vin;
     public static volatile SingularAttribute<Autos, Integer> id;
     public static volatile SingularAttribute<Autos, String> modelo;
-    public static volatile SingularAttribute<Autos, String> placas;
     public static volatile SingularAttribute<Autos, Integer> año;
+    public static volatile SingularAttribute<Autos, String> placas;
 
 }

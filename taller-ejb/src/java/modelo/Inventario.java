@@ -36,15 +36,28 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Inventario.findByDescripcion", query = "SELECT i FROM Inventario i WHERE i.descripcion = :descripcion"),
     @NamedQuery(name = "Inventario.findByCantidad", query = "SELECT i FROM Inventario i WHERE i.cantidad = :cantidad"),
     @NamedQuery(name = "Inventario.findByMarca", query = "SELECT i FROM Inventario i WHERE i.marca = :marca"),
-    @NamedQuery(name = "Inventario.findByCategoria", query = "SELECT i FROM Inventario i WHERE i.categoria = :categoria")})
+    @NamedQuery(name = "Inventario.findByCategoria", query = "SELECT i FROM Inventario i WHERE i.categoria = :categoria"),
+    @NamedQuery(name = "Inventario.findByTipo", query = "SELECT i FROM Inventario i WHERE i.tipo = :tipo")})
 public class Inventario implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID")
+    private Integer id;
     @Size(max = 255)
     @Column(name = "NOMBRE")
     private String nombre;
+    @Column(name = "PRECIO_COMPRA")
+    private Integer precioCompra;
+    @Column(name = "PRECIO_VENTA")
+    private Integer precioVenta;
     @Size(max = 255)
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    @Column(name = "CANTIDAD")
+    private Integer cantidad;
     @Size(max = 100)
     @Column(name = "MARCA")
     private String marca;
@@ -56,19 +69,6 @@ public class Inventario implements Serializable {
     private String tipo;
     @OneToMany(mappedBy = "idProdServ")
     private List<DetalleServicio> detalleServicioList;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
-    private Integer id;
-    @Column(name = "PRECIO_COMPRA")
-    private Integer precioCompra;
-    @Column(name = "PRECIO_VENTA")
-    private Integer precioVenta;
-    @Column(name = "CANTIDAD")
-    private Integer cantidad;
 
     public Inventario() {
     }
@@ -85,6 +85,13 @@ public class Inventario implements Serializable {
         this.id = id;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Integer getPrecioCompra() {
         return precioCompra;
@@ -102,6 +109,13 @@ public class Inventario implements Serializable {
         this.precioVenta = precioVenta;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
     public Integer getCantidad() {
         return cantidad;
@@ -109,55 +123,6 @@ public class Inventario implements Serializable {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
-    }
-
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Inventario)) {
-            return false;
-        }
-        Inventario other = (Inventario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "modelo.Inventario[ id=" + id + " ]";
-    }
-    @XmlTransient
-    public List<DetalleServicio> getDetalleServicioList() {
-        return detalleServicioList;
-    }
-    public void setDetalleServicioList(List<DetalleServicio> detalleServicioList) {
-        this.detalleServicioList = detalleServicioList;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public String getMarca() {
@@ -182,6 +147,40 @@ public class Inventario implements Serializable {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    @XmlTransient
+    public List<DetalleServicio> getDetalleServicioList() {
+        return detalleServicioList;
+    }
+
+    public void setDetalleServicioList(List<DetalleServicio> detalleServicioList) {
+        this.detalleServicioList = detalleServicioList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Inventario)) {
+            return false;
+        }
+        Inventario other = (Inventario) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "modelo.Inventario[ id=" + id + " ]";
     }
     
 }

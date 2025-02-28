@@ -39,33 +39,32 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Autos.findByEstado", query = "SELECT a FROM Autos a WHERE a.estado = :estado")})
 public class Autos implements Serializable {
 
-    @Size(max = 255)
-    @Column(name = "MARCA")
-    private String marca;
-    @Size(max = 255)
-    @Column(name = "MODELO")
-    private String modelo;
-    @Size(max = 255)
-    @Column(name = "COLOR")
-    private String color;
-    @Size(max = 255)
-    @Column(name = "PLACAS")
-    private String placas;
-    @Size(max = 255)
-    @Column(name = "VIN")
-    private String vin;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Size(max = 255)
+    @Column(name = "MARCA")
+    private String marca;
+    @Size(max = 255)
+    @Column(name = "MODELO")
+    private String modelo;
     @Column(name = "A\u00d1O")
     private Integer año;
+    @Size(max = 255)
+    @Column(name = "COLOR")
+    private String color;
+    @Size(max = 255)
+    @Column(name = "PLACAS")
+    private String placas;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "KM")
     private Double km;
+    @Size(max = 255)
+    @Column(name = "VIN")
+    private String vin;
     @Column(name = "ESTADO")
     private Boolean estado;
     @JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID")
@@ -87,6 +86,21 @@ public class Autos implements Serializable {
         this.id = id;
     }
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
 
     public Integer getAño() {
         return año;
@@ -96,6 +110,21 @@ public class Autos implements Serializable {
         this.año = año;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getPlacas() {
+        return placas;
+    }
+
+    public void setPlacas(String placas) {
+        this.placas = placas;
+    }
 
     public Double getKm() {
         return km;
@@ -105,6 +134,13 @@ public class Autos implements Serializable {
         this.km = km;
     }
 
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
 
     public Boolean getEstado() {
         return estado;
@@ -145,46 +181,6 @@ public class Autos implements Serializable {
     @Override
     public String toString() {
         return "modelo.Autos[ id=" + id + " ]";
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getPlacas() {
-        return placas;
-    }
-
-    public void setPlacas(String placas) {
-        this.placas = placas;
-    }
-
-    public String getVin() {
-        return vin;
-    }
-
-    public void setVin(String vin) {
-        this.vin = vin;
     }
     
 }

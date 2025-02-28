@@ -111,10 +111,13 @@
                                         <p:inputText value="#{aDHojaServicio.hojaServicio.observaciones}" />
 
                                         <p:outputLabel value="Empleado" for="empleado"/>
-                                        <h:selectOneMenu id="empleado" value="#{aDEmpleado.empleado.nombre}">
-                                            <f:selectItem itemLabel="-- Seleccione un vehículo --" itemValue="" noSelectionOption="true" />
-                                            <f:selectItems value="#{aDEmpleado.empleados}" />
+                                        <h:selectOneMenu id="empleado" value="#{aDEmpleado.idEmpleadoSeleccionado}">
+                                            <f:selectItems value="#{aDEmpleado.empleados}"
+                                                           var="emp"
+                                                           itemValue="#{emp.id}" 
+                                                           itemLabel="#{emp.nombre}" />
                                         </h:selectOneMenu>
+
                                     </p:panel>
                                 </p:tab>
 

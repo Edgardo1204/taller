@@ -11,8 +11,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import manipuladatos.MDDetalleServicio;
+import manipuladatos.MDHojaServicio;
 import manipuladatos.MDInventario;
 import modelo.DetalleServicio;
+import modelo.Empleado;
 import modelo.HojaServicio;
 import modelo.Inventario;
 import modelo.Servicio;
@@ -20,6 +22,9 @@ import modelo.Servicio;
 @Named(value = "aDServicios")
 @SessionScoped
 public class ADServicios implements Serializable {
+
+    @EJB
+    private MDHojaServicio mDHojaServicio;
 
     @EJB
     private MDDetalleServicio mDDetalleServicio;
@@ -113,18 +118,22 @@ public class ADServicios implements Serializable {
             return null;
         }
 
-        // Insertar la hoja de servicio
+        // Buscar el objeto Empleado usando el ID seleccionado
+        Empleado empleadoSeleccionado = aDEmpleado.buscarEmpleadoPorId(aDEmpleado.getIdEmpleadoSeleccionado());
+        if (empleadoSeleccionado == null) {
+            showMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Debe seleccionar un empleado válido");
+            return null;
+        }
+
+        // Crear y asignar la hoja de servicio
         HojaServicio hojaServicio = new HojaServicio();
         hojaServicio.setFolio(aDHojaServicio.getUltimoFolio());
         hojaServicio.setIdCliente(aDClientes.getCliente());
-        hojaServicio.setIdEmpleado(aDEmpleado.getEmpleado());
+        hojaServicio.setIdEmpleado(empleadoSeleccionado); // Ahora asigna el objeto correcto
         hojaServicio.setFecha(aDHojaServicio.getFechaActual());
         hojaServicio.setObservaciones("Observaciones del servicio");
 
-        aDHojaServicio.agregarHojaServicio();
-
-        // Obtener el id de la hoja de servicio recién insertada
-        //int idHojaServicio = aDHojaServicio.getUltimaHojaServicio() - 1;
+        mDHojaServicio.insertarHojaServicio(hojaServicio);
 
         // Insertar los detalles del servicio
         for (Inventario servicio : selectedServicios) {
@@ -139,7 +148,7 @@ public class ADServicios implements Serializable {
 
         showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Servicios guardados correctamente");
 
-        return null; // Permanece en la misma página o puedes redirigir a otra
+        return null;
     }
 
     private boolean cantidadesValidas() {

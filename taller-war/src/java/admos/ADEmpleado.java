@@ -26,6 +26,15 @@ public class ADEmpleado implements Serializable {
 
     private Empleado empleado = new Empleado();
     private List<Empleado> empleados = null;
+    private int idEmpleadoSeleccionado;
+
+    public int getIdEmpleadoSeleccionado() {
+        return idEmpleadoSeleccionado;
+    }
+
+    public void setIdEmpleadoSeleccionado(int idEmpleadoSeleccionado) {
+        this.idEmpleadoSeleccionado = idEmpleadoSeleccionado;
+    }
 
     /**
      * Creates a new instance of ADEmpleado
@@ -48,8 +57,8 @@ public class ADEmpleado implements Serializable {
         }
         return empleados;
     }
-    
-        public String agregarEmpleado() {
+
+    public String agregarEmpleado() {
         try {
             mDEmpleado.insertarEmpleado(empleado);
             empleados = mDEmpleado.obtenerEmpleado();
@@ -59,5 +68,9 @@ public class ADEmpleado implements Serializable {
             e.printStackTrace();
             return "errorPage";
         }
+    }
+
+    public Empleado buscarEmpleadoPorId(int id) {
+        return mDEmpleado.obtenerEmpleadoPorId(id);
     }
 }

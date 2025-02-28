@@ -42,31 +42,30 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "HojaServicio.findByObservaciones", query = "SELECT h FROM HojaServicio h WHERE h.observaciones = :observaciones")})
 public class HojaServicio implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "FOLIO")
-    private int folio;
-    @Size(max = 255)
-    @Column(name = "OBSERVACIONES")
-    private String observaciones;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idHoja")
-    private List<DetalleServicio> detalleServicioList;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "FOLIO")
+    private int folio;
     @Column(name = "FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
+    @Size(max = 255)
+    @Column(name = "OBSERVACIONES")
+    private String observaciones;
     @JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID")
     @ManyToOne
     private Clientes idCliente;
     @JoinColumn(name = "ID_EMPLEADO", referencedColumnName = "ID")
     @ManyToOne
     private Empleado idEmpleado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idHoja")
+    private List<DetalleServicio> detalleServicioList;
 
     public HojaServicio() {
     }
@@ -88,6 +87,13 @@ public class HojaServicio implements Serializable {
         this.id = id;
     }
 
+    public int getFolio() {
+        return folio;
+    }
+
+    public void setFolio(int folio) {
+        this.folio = folio;
+    }
 
     public Date getFecha() {
         return fecha;
@@ -97,6 +103,13 @@ public class HojaServicio implements Serializable {
         this.fecha = fecha;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 
     public Clientes getIdCliente() {
         return idCliente;
@@ -112,6 +125,15 @@ public class HojaServicio implements Serializable {
 
     public void setIdEmpleado(Empleado idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    @XmlTransient
+    public List<DetalleServicio> getDetalleServicioList() {
+        return detalleServicioList;
+    }
+
+    public void setDetalleServicioList(List<DetalleServicio> detalleServicioList) {
+        this.detalleServicioList = detalleServicioList;
     }
 
     @Override
@@ -137,31 +159,6 @@ public class HojaServicio implements Serializable {
     @Override
     public String toString() {
         return "modelo.HojaServicio[ id=" + id + " ]";
-    }
-
-    public int getFolio() {
-        return folio;
-    }
-
-    public void setFolio(int folio) {
-        this.folio = folio;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    @XmlTransient
-    public List<DetalleServicio> getDetalleServicioList() {
-        return detalleServicioList;
-    }
-
-    public void setDetalleServicioList(List<DetalleServicio> detalleServicioList) {
-        this.detalleServicioList = detalleServicioList;
     }
     
 }

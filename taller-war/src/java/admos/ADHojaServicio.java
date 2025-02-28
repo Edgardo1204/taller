@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import manipuladatos.MDHojaServicio;
 import modelo.HojaServicio;
 
@@ -29,6 +30,14 @@ public class ADHojaServicio implements Serializable {
 
     private HojaServicio hojaServicio;
     private List<HojaServicio> hojasServicio;
+
+    @Inject
+    private ADClientes aDClientes;
+    @Inject
+    private ADEmpleado aDEmpleado;
+
+    @Inject
+    private ADServicios aDServicios;
 
     public ADHojaServicio() {
         hojaServicio = new HojaServicio();
@@ -54,15 +63,35 @@ public class ADHojaServicio implements Serializable {
         return hojasServicio;
     }
 
-    public String agregarHojaServicio() {
+    public void guardarServicio() {
         try {
+            if (hojaServicio == null) {
+                hojaServicio = new HojaServicio();
+            }
+
+            // Asignar fecha actual si no está definida
+            if (hojaServicio.getFecha() == null) {
+                hojaServicio.setFecha(new Date());
+            }
+
+            // Validar que cliente y auto están asignados
+            if (hojaServicio.getIdCliente() == null) {
+                hojaServicio.setIdCliente(aDClientes.getCliente());
+            }
+
+            // Asignar empleado seleccionado
+            if (hojaServicio.getIdEmpleado() == null) {
+                hojaServicio.setIdEmpleado(aDEmpleado.getEmpleado());
+            }
+
+            // Generar Folio (si es necesario)
+            hojaServicio.setFolio(getUltimoFolio());
+
+            // Guardar en base de datos
             mDHojaServicio.insertarHojaServicio(hojaServicio);
-            hojasServicio = mDHojaServicio.obtenerHojaServicio();
-            hojaServicio = new HojaServicio();
-            return "index?faces-redirect=true";
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "errorPage";
         }
     }
 

@@ -37,6 +37,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empleado.findByDireccion", query = "SELECT e FROM Empleado e WHERE e.direccion = :direccion")})
 public class Empleado implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID")
+    private Integer id;
     @Size(max = 45)
     @Column(name = "NOMBRE")
     private String nombre;
@@ -52,13 +58,6 @@ public class Empleado implements Serializable {
     @Size(max = 100)
     @Column(name = "DIRECCION")
     private String direccion;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
-    private Integer id;
     @OneToMany(mappedBy = "idEmpleado")
     private List<HojaServicio> hojaServicioList;
 
@@ -75,41 +74,6 @@ public class Empleado implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-
-    @XmlTransient
-    public List<HojaServicio> getHojaServicioList() {
-        return hojaServicioList;
-    }
-
-    public void setHojaServicioList(List<HojaServicio> hojaServicioList) {
-        this.hojaServicioList = hojaServicioList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empleado)) {
-            return false;
-        }
-        Empleado other = (Empleado) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return nombre+" "+apellidos;
     }
 
     public String getNombre() {
@@ -150,6 +114,40 @@ public class Empleado implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    @XmlTransient
+    public List<HojaServicio> getHojaServicioList() {
+        return hojaServicioList;
+    }
+
+    public void setHojaServicioList(List<HojaServicio> hojaServicioList) {
+        this.hojaServicioList = hojaServicioList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Empleado)) {
+            return false;
+        }
+        Empleado other = (Empleado) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "modelo.Empleado[ id=" + id + " ]";
     }
     
 }
