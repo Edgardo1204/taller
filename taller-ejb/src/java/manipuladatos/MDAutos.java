@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import modelo.Autos;
+import modelo.Clientes;
 
 /**
  *
@@ -49,6 +50,10 @@ public class MDAutos {
             AutosF.remove(inv);
 
         }
+    }
+
+    public List<Autos> getAutosByIdClientes(Clientes x) {
+        return AutosF.getAutosByIdCliente(x);
     }
 
     // Add business logic below. (Right-click in editor and choose

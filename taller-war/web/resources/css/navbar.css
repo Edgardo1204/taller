@@ -1,12 +1,4 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : 11 feb. 2025, 13:12:14
-    Author     : Jesus
-*/
-
+/* Estilos existentes */
 .navbar {
     background-color: #2c3e50;
     color: white;
@@ -33,11 +25,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     width: 180px;
     height: 100vh;
     position: fixed;
-    top: 55px; /* Ajusta este valor según la altura de tu navbar */
+    top: 55px;
     left: 0;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 999;
+    transition: transform 0.3s ease;
 }
 .sidebar ul {
     list-style: none;
@@ -60,9 +53,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     background-color: #1abc9c;
 }
 .container {
-    margin-left: 200px; /* Ajusta este valor según el ancho de tu sidebar */
+    margin-left: 200px;
     padding: 20px;
-    margin-top: 60px; /* Ajusta este valor según la altura de tu navbar */
+    margin-top: 60px;
 }
 .form-container {
     background-color: #fff;
@@ -85,7 +78,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .btn-danger {
     background-color: #dc3545;
 }
-
 button.ui-button {
     margin-right: .5rem;
 }
@@ -115,12 +107,29 @@ button.ui-button {
 .ui-datatable tr:hover {
     background-color: #f1f1f1;
 }
+.ui-panelmenu {
+    margin-top: 20px;
+}
+.ui-panelmenu-header {
+    background-color: #1abc9c;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+}
+.ui-panelmenu-content {
+    background-color: #34495e;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Estilos para el sidebar desplegable */
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
         height: auto;
         position: relative;
         top: 0;
+        transform: translateX(-100%);
     }
     .container {
         margin-left: 0;
@@ -132,5 +141,15 @@ button.ui-button {
     }
     .navbar .company-name {
         margin-bottom: 10px;
+    }
+    .toggle-btn {
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .sidebar.active {
+        transform: translateX(0);
     }
 }

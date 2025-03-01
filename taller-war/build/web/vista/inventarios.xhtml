@@ -18,41 +18,40 @@
                         <h:form styleClass="form-container">
                             <h1><h:outputText value="Agregar Producto o Servicio"/></h1>
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="Categoría:" for="categoria" />
-                                <p:selectOneMenu id="categoria" 
-                                                 value="#{aDInventaro.inventario.categoria}" 
+                                <p:outputLabel value="Tipo" for="tipo" />
+                                <p:selectOneMenu id="tipo" 
+                                                 value="#{aDInventario.inventario.tipo}" 
                                                  required="true" 
-                                                 requiredMessage="Debe seleccionar una categoría">
+                                                 requiredMessage="Debe seleccionar un tipo">
                                     <f:selectItem itemLabel="Seleccione una opción" itemValue="" />
-                                    <f:selectItem itemLabel="Producto" itemValue="PRODUCTO" />
-                                    <f:selectItem itemLabel="Servicio" itemValue="SERVICIO" />
-                                    <p:ajax update="@form" listener="#{aDInventaro.actualizarCampos}" />
+                                    <f:selectItem itemLabel="PRODUCTO" itemValue="PRODUCTO" />
+                                    <f:selectItem itemLabel="SERVICIO" itemValue="SERVICIO" />
+                                    <p:ajax update="@form" listener="#{aDInventario.actualizarCampos}" />
                                 </p:selectOneMenu>
                                 <p:outputLabel value="Nombre:" for="nombre" />
-                                <p:inputText id="nombre" value="#{aDInventaro.inventario.nombre}" title="Nombre" required="true" requiredMessage="El nombre es obligatorio"/>
-
-                                <p:outputLabel value="PrecioCompra:" for="precioCompra" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:inputNumber id="precioCompra" value="#{aDInventaro.inventario.precioCompra}" title="PrecioCompra" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:outputLabel value="PrecioVenta:" for="precioVenta" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:inputText id="precioVenta" value="#{aDInventaro.inventario.precioVenta}" title="PrecioVenta" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputText id="nombre" value="#{aDInventario.inventario.nombre}" title="Nombre" required="true" requiredMessage="El nombre es obligatorio"/>
+                                <p:outputLabel value="PrecioCompra:" for="precioCompra" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:inputNumber id="precioCompra" value="#{aDInventario.inventario.precioCompra}" title="PrecioCompra" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:outputLabel value="PrecioVenta:" for="precioVenta" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:inputText id="precioVenta" value="#{aDInventario.inventario.precioVenta}" title="PrecioVenta" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
                                 <p:outputLabel value="Descripcion:" for="descripcion" />
-                                <p:inputText id="descripcion" value="#{aDInventaro.inventario.descripcion}" title="Descripcion" />
-                                <p:outputLabel value="Cantidad:" for="cantidad" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:inputText id="cantidad" value="#{aDInventaro.inventario.cantidad}" title="Cantidad" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:outputLabel value="Marca:" for="marca" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
-                                <p:inputText id="marca" value="#{aDInventaro.inventario.marca}" title="Marca" rendered="#{aDInventaro.inventario.categoria == 'PRODUCTO'}"/>
+                                <p:inputText id="descripcion" value="#{aDInventario.inventario.descripcion}" title="Descripcion" />
+                                <p:outputLabel value="Cantidad:" for="cantidad" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:inputText id="cantidad" value="#{aDInventario.inventario.cantidad}" title="Cantidad" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:outputLabel value="Marca:" for="marca" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
+                                <p:inputText id="marca" value="#{aDInventario.inventario.marca}" title="Marca" rendered="#{aDInventario.inventario.tipo == 'PRODUCTO'}"/>
 
                             </p:panelGrid>
                             <div class="button-container">
                                 <p:commandButton value="Agregar Producto" 
-                                                 action="#{aDInventaro.agregarInventario}" 
+                                                 action="#{aDInventario.agregarInventario}" 
                                                  styleClass="btn"
                                                  update="@form"
                                                  oncomplete="if (!args.validationFailed) PF('registroDialog').show();"/>
                             </div>
                             <p:messages showDetail="true" showIcon="true" closable="true"/>
                             <p:dialog header="Resultado" widgetVar="registroDialog" modal="true" resizable="false">
-                                <h:outputText value="#{aDInventaro.mensajeRegistro}" />
+                                <h:outputText value="#{aDInventario.mensajeRegistro}" />
                                 <p:commandButton value="Aceptar" onclick="PF('registroDialog').hide();" type="button" />
                             </p:dialog>
                         </h:form>
@@ -62,35 +61,65 @@
 
 
                         <!-- Tabla para listar productos -->
-                        <h:form styleClass="table-container">
-                            <h1><h:outputText value="Lista de Productos"/></h1>
-                            <p:dataTable value="#{aDInventaro.inventarios}" var="item" id="tablaInventario">
-                                <p:column headerText="Id">
+                        <h:form>
+                            <h1><h:outputText value="List"/></h1>
+                            <p:dataTable value="#{aDInventario.inventarios}" var="item">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.id}"/>
                                 </p:column>
-                                <p:column headerText="Nombre">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.nombre}"/>
                                 </p:column>
-                                <p:column headerText="Precio de Compra">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="PrecioCompra"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.precioCompra}"/>
                                 </p:column>
-                                <p:column headerText="Precio de Venta">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="PrecioVenta"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.precioVenta}"/>
                                 </p:column>
-                                <p:column headerText="Descripcion">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Descripcion"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.descripcion}"/>
                                 </p:column>
-                                <p:column headerText="Cantidad">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Cantidad"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.cantidad}"/>
                                 </p:column>
-                                <p:column headerText="Marca">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Marca"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.marca}"/>
                                 </p:column>
-                                <p:column headerText="Categoria">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Categoria"/>
+                                    </f:facet>
                                     <h:outputText value="#{item.categoria}"/>
                                 </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Tipo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.tipo}"/>
+                                </p:column>
                                 <p:column headerText="Acciones">
-                                    <p:commandButton value="Eliminar" icon="pi pi-trash" action="#{aDInventaro.eliminarInventario(item)}" styleClass="btn-danger" />
+                                    <p:commandButton value="Eliminar" icon="pi pi-trash" action="#{aDInventario.eliminarInventario(item)}" styleClass="btn-danger" />
                                 </p:column>
                             </p:dataTable>
                         </h:form>

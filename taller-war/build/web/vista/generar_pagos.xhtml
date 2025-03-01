@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="primefaces"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../templates/navbar.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="card">
+                        <h:form>
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <p:wizard flowListener="#{aDClientes.onFlowProcess}">
+                                <p:tab id="cliente" title="Cliente">
+                                    <p:panel header="Cliente">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <p:outputLabel value="Nombre: " for="@next"/>
+                                            <p:autoComplete id="dd" dropdown="true" value="#{aDClientes.nombreC}"
+                                                            completeMethod="#{aDClientes.completeText}" scrollHeight="250" required="true">
+                                                <p:ajax event="itemSelect" listener="#{aDClientes.onClienteSelect}" update="@form"/>
+                                            </p:autoComplete>
+
+                                            <h:outputText value="Apellido: *"/>
+                                            <p:inputText value="#{aDClientes.cliente.apellido}" label="Lastname" disabled="true"/>
+
+                                            <h:outputText value="Telefono:  "/>
+                                            <p:inputText value="#{aDClientes.cliente.telefono}" disabled="true"/>
+
+                                            <h:outputText value="Correo  "/>
+                                            <p:inputText value="#{aDClientes.cliente.correo}" disabled="true"/>
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="folio" title="Folios Activos">
+                                    <p:panel header="Folios Activos">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+
+                                            <p:outputLabel value="Numero de folio a generar:" for="idCliente" />
+                                            <h:selectOneMenu id="idCliente" value="#{aDHoja_Servicio.folio_a_generar}" required="true" > 
+                                                <f:selectItems value="#{aDHoja_Servicio.getHojasActivas(aDClientes)}" var="item" itemValue="#{item.id}" itemLabel="#{item.folio}"/>
+                                            </h:selectOneMenu>
+                                            <f:view>
+
+
+                                                <h:form>
+                                                    <h1><h:outputText value="" /></h1>
+                                                    <p:dataTable value="#{aDHoja_Servicio.getHojasActivas(aDClientes)}" var="item">
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Folio"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.folio}"/>
+                                                        </p:column>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Fecha"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.fecha}">
+                                                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                                                            </h:outputText>
+                                                        </p:column>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Observaciones"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.observaciones}"/>
+                                                        </p:column>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Auto"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.idAuto}"/>
+                                                        </p:column>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Cliente"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.idCliente}"/>
+                                                        </p:column>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Empleado a cargo"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{item.idEmpleado}"/>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </h:form>
+                                            </f:view>
+
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="servicio" title="Resumen de servicios">
+                                    <f:view>
+                                        <h:form>
+                                            <h1><h:outputText value="List"/></h1>
+                                            <p:dataTable value="#{aDDetalleServicio.getDetallesDeServicios(aDHoja_Servicio,aDAutos)}" var="item">
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Nombre"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.idProdServ}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Tipo"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.idProdServ.tipo}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Categoria"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.idProdServ.categoria}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Cantidad"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.cantidad}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Precio"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.precio}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Total"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{item.cantidad != null and item.cantidad != '' ? item.precio * item.cantidad : item.precio}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:form>
+                                    </f:view>
+                                </p:tab>
+
+                                <p:tab id="confirmacion" title="Generar">
+                                    <p:panel header="Confirmacion">
+                                        <div class="paraPdf">
+                                            <f:view>
+                                                <center>
+                                                    <h:form styleClass="form-container">
+                                                        <div class="header">
+                                                            <h:graphicImage value="../resources/img/logo.jpeg" alt="Company Logo" />
+                                                        </div>
+                                                        <h:panelGrid columns="1" >
+                                                            <h:outputText value="#{aDFecha.currentDate}"  />
+                                                        </h:panelGrid>
+
+
+                                                        <h:panelGrid columns="2" styleClass="invoice-details">
+                                                            <h:outputText value="N° ORDEN       " />
+                                                            <h:outputText value="#{aDHoja_Servicio.folio_a_generar}"  />
+
+                                                        </h:panelGrid>
+                                                        <h:panelGrid columns="2" styleClass="customer-details">
+                                                            <h:outputText value="NOMBRE         :" />
+                                                            <h:outputText value="#{aDClientes.cliente}" />
+                                                            <h:outputText value="TELEFONO       :" />
+                                                            <h:outputText value="#{aDClientes.cliente.telefono}"  />
+                                                            <h:outputText value="MARCA          :" />
+                                                            <h:outputText value="#{aDAutos.auto.marca}"  />
+                                                            <h:outputText value="MODELO         " />
+                                                            <h:outputText value="#{aDAutos.auto.modelo}"  />
+                                                            <h:outputText value="KM             " />
+                                                            <h:outputText value="#{aDAutos.auto.km}"  />
+                                                            <h:outputText value="PLACAS         " />
+                                                            <h:outputText value="#{aDAutos.auto.placas}"  />
+                                                            <h:outputText value="VIN            " />
+                                                            <h:outputText value="#{aDAutos.auto.vin}"  />
+                                                        </h:panelGrid>
+                                                        <p:messages/>
+                                                        <h:form>
+
+                                                            <p:dataTable value="#{aDDetalleServicio.getDetallesDeServicios(aDHoja_Servicio,aDAutos)}" var="item">
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Nombre"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.idProdServ}"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Tipo"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.idProdServ.tipo}"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Categoria"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.idProdServ.categoria}"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Cantidad"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.cantidad}"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Precio"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.precio}"/>
+                                                                </p:column>
+                                                                <p:column>
+                                                                    <f:facet name="header">
+                                                                        <h:outputText value="Total"/>
+                                                                    </f:facet>
+                                                                    <h:outputText value="#{item.cantidad != null and item.cantidad != '' ? item.precio * item.cantidad : item.precio}"/>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </h:form>
+                                                        <div class="total">
+                                                            <p>Total a Pagar: #{aDDetalleServicio.totalAPagar}</p>
+                                                        </div>
+                                                        <div class="footer">
+                                                            <p>ALAMOS 601 COL. REFORMA C.P.68050</p>
+                                                        </div>
+                                                    </h:form>
+                                                </center>
+                                            </f:view>
+                                        </div>
+
+                                        <p:commandButton value="Submit" action="#{userWizard.save}" update="growl" process="@this"/>
+
+                                    </p:panel>                                   
+                                </p:tab>
+                            </p:wizard>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <h:outputStylesheet name="css/HojaServ.css"/>
+        <title>Hoja de Servicio</title>
+
+    </h:head>
+    <h:body>
+        <div class="paraPdf">
+            <f:view>
+                <center>
+                    <h:form styleClass="form-container">
+                        <div class="header">
+                            <h:graphicImage value="../resources/img/logo.jpeg" alt="Company Logo" />
+                            <h1>Hoja de Servicio</h1>
+                            <br></br>
+                        </div>
+                        <h:panelGrid columns="1" styleClass="panelGrid-no-border">
+                            <h:outputText value="Alamos #601 Esq. H. Colegio Militar Col. Reforma C. P. 68050" />
+                            <h:outputText value="E-mail: quicklubreforma@gmail.com" />
+                            <br></br>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" styleClass="panelGrid-no-border">
+                            <h:outputText value="Tel: (951) 502 6420" />
+                            <h:outputText value="Cel: (951) 318 1083" />
+                            <br></br>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" styleClass="panelGrid-no-border invoice-details">
+                            <h:outputText value="Fecha: #{aDServicios.hojaServicioGuardada.fecha}" />
+                            <h:outputText value="Folio: #{aDServicios.hojaServicioGuardada.folio}" />
+                            <br></br>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" styleClass="panelGrid-no-border customer-details">
+                            <h:outputText value="NOMBRE" />
+                            <h:outputText value="#{aDClientes.cliente}" />
+                            <h:outputText value="TELEFONO" />
+                            <h:outputText value="#{aDClientes.cliente.telefono}" />
+                            <h:outputText value="MARCA" />
+                            <h:outputText value="#{aDAutos.auto.marca}" />
+                            <h:outputText value="MODELO" />
+                            <h:outputText value="#{aDAutos.auto.modelo}" />
+                            <h:outputText value="KM" />
+                            <h:outputText value="#{aDAutos.auto.km}" />
+                            <h:outputText value="PLACAS" />
+                            <h:outputText value="#{aDAutos.auto.placas}" />
+                            <h:outputText value="VIN" />
+                            <h:outputText value="#{aDAutos.auto.vin}" />
+                        </h:panelGrid>
+                        <p:messages />
+                        <p:dataTable value="#{aDServicios.detallesGuardados}" var="item" styleClass="custom-datatable">
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{item.idProdServ.nombre}" />
+                            </p:column>
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{item.idProdServ.tipo}" />
+                            </p:column>
+                            <p:column headerText="Categoría">
+                                <h:outputText value="#{item.idProdServ.categoria}" />
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{item.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{item.precio}" />
+                            </p:column>
+                            <p:column headerText="Total">
+                                <h:outputText value="#{item.cantidad * item.precio}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p class="total-pagar">
+                            Total a Pagar: 
+                        </p>
+                        <br></br>
+
+                        <p>Acepto servicio</p>
+                        <br></br>
+
+                        <h:panelGrid columns="2" styleClass="panelGrid-no-border">
+                            <h:outputText value="______________" />
+                            <h:outputText value="______________" />
+                            <h:outputText value="Cliente" />
+                            <h:outputText value="Elaboró Servicio" />
+                        </h:panelGrid>
+                    </h:form>
+                </center>
+            </f:view>
+        </div>
+    </h:body>
+</html>

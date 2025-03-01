@@ -18,6 +18,12 @@
                                 <p:tab id="cliente" title="Cliente">
                                     <p:panel header="Datos del cliente">
                                         <p:messages/>
+                                        <p:commandButton value="Registrar nuevo cliente" icon="pi pi-plus" 
+                                                         action="#{aDClientes.cliente}"
+                                                         oncomplete="PF('manageClientDialog').show()"
+                                                         styleClass="ui-button-success" style="margin-right: .5rem"
+                                                         update=":dialogForm:manage-client-content">
+                                        </p:commandButton>
                                         <h:panelGrid columns="2" columnClasses="label, value">
                                             <p:outputLabel value="Nombre:" for="nombre"/>
                                             <p:autoComplete id="nombre" dropdown="true" value="#{aDClientes.nombreC}"
@@ -26,7 +32,7 @@
                                             </p:autoComplete>
 
                                             <h:outputText value="Apellido:"/>
-                                            <p:inputText value="#{aDClientes.cliente.apellido}" label="Apellido" disabled="true"/>
+                                            <p:inputText value="#{aDClientes.cliente.apellido}" disabled="true"/>
 
                                             <h:outputText value="Teléfono:"/>
                                             <p:inputText value="#{aDClientes.cliente.telefono}" disabled="true"/>
@@ -41,6 +47,12 @@
                                 <p:tab id="vehiculo" title="Vehículo">
                                     <p:panel header="Datos del vehículo">
                                         <p:messages/>
+                                        <p:commandButton value="Registrar vehiculo que no esta en la lista" icon="pi pi-plus" 
+                                                         action="#{aDAutos.auto}"
+                                                         oncomplete="PF('manageAutoDialog').show()"
+                                                         styleClass="ui-button-success" style="margin-right: .5rem"
+                                                         update=":dialogForm:manage-auto-content">
+                                        </p:commandButton>        
                                         <h:panelGrid id="datosVehiculo" columns="2" columnClasses="label, value">
                                             <p:outputLabel value="Modelo:" for="modelo"/>
                                             <h:selectOneMenu id="modelo" value="#{aDAutos.autoId}">
@@ -72,10 +84,9 @@
 
                                 <!-- Pestaña de Servicio -->
                                 <p:tab id="servicio" title="Servicio a realizar">
-                                    <p:panel header="Servicios a realizar">
+                                    <p:panel header="Seleccione los servicios a realizar y productos requeridos">
                                         <p:messages id="messagesServicios"/>
                                         <div class="card">
-                                            <h5>Seleccione los servicios</h5>
                                             <p:dataTable id="checkboxDT" var="item" value="#{aDServicios.serviciosDisponibles}"
                                                          selection="#{aDServicios.selectedServicios}" rowKey="#{item.id}" selectionPageOnly="false" selectionRowMode="none"
                                                          style="margin-bottom:0" paginator="true" rows="5">
@@ -86,8 +97,8 @@
                                                 <p:column headerText="Descripción">
                                                     <h:outputText value="#{item.descripcion}" />
                                                 </p:column>
-                                                <p:column headerText="Categoría">
-                                                    <h:outputText value="#{item.categoria}" />
+                                                <p:column headerText="Tipo">
+                                                    <h:outputText value="#{item.tipo}" />
                                                 </p:column>
                                                 <p:column headerText="Precio">
                                                     <p:inputText id="precio_venta" value="#{item.precioVenta}" style="width: 50px;">
@@ -117,10 +128,8 @@
                                                            itemValue="#{emp.id}" 
                                                            itemLabel="#{emp.nombre}" />
                                         </h:selectOneMenu>
-
                                     </p:panel>
                                 </p:tab>
-
 
                                 <!-- Pestaña de Confirmación -->
                                 <p:tab id="confirmacion" title="Confirmación">
@@ -154,6 +163,76 @@
                                     </p:panel>
                                 </p:tab>
                             </p:wizard>
+                        </h:form>
+
+                        <!-- Dialog form moved outside the main form -->
+                        <h:form id="dialogForm">
+                            <p:dialog header="Registrar Auto" showEffect="fade" modal="true" widgetVar="manageAutoDialog"
+                                      responsive="true">
+                                <p:outputPanel id="manage-auto-content" class="ui-fluid">
+                                    <h1><h:outputText value="Auto"/></h1>
+                                    <p:panelGrid columns="2" style="margin-bottom: 10px;">
+                                        <p:outputLabel value="Cliente:" for="idCliente" />
+                                        <h:selectOneMenu id="idCliente" value="#{aDAutos.clienteFK}">
+                                            <f:selectItems value="#{aDClientes.clientes}" var="item" 
+                                                           itemValue="#{item.id}" itemLabel="#{item.nombre}" />
+                                        </h:selectOneMenu>
+
+                                        <p:outputLabel value="Año:" for="año" />
+                                        <p:inputText id="año" value="#{aDAutos.auto.año}" title="Año" />
+
+                                        <p:outputLabel value="Km:" for="km" />
+                                        <p:inputText id="km" value="#{aDAutos.auto.km}" title="Km" />
+
+                                        <p:outputLabel value="Marca:" for="marca" />
+                                        <p:inputText id="marca" value="#{aDAutos.auto.marca}" title="Marca" />
+
+                                        <p:outputLabel value="Modelo:" for="modelo" />
+                                        <p:inputText id="modelo" value="#{aDAutos.auto.modelo}" title="Modelo" />
+
+                                        <p:outputLabel value="Color:" for="color" />
+                                        <p:inputText id="color" value="#{aDAutos.auto.color}" title="Color" />
+
+                                        <p:outputLabel value="Placas:" for="placas" />
+                                        <p:inputText id="placas" value="#{aDAutos.auto.placas}" title="Placas" />
+
+                                        <p:outputLabel value="Vin:" for="vin" />
+                                        <p:inputText id="vin" value="#{aDAutos.auto.vin}" title="Vin" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+
+                                <!-- Botones de acción en el pie del diálogo -->
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar" action="#{aDAutos.agregarAutoDialog(aDClientes)}" 
+                                                     update=":form:growl :form:datosVehiculo @form" 
+                                                     oncomplete="PF('manageAutoDialog').hide()"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageAutoDialog').hide()"
+                                                     class="ui-button-secondary" type="button" />
+                                </f:facet>
+                            </p:dialog>
+                            <p:dialog header="Registrar Cliente" showEffect="fade" modal="true" widgetVar="manageClientDialog"
+                                      responsive="true">
+                                <p:outputPanel id="manage-client-content" class="ui-fluid">
+                                    <h1><h:outputText value="Cliente"/></h1>
+                                    <p:panelGrid columns="2" style="margin-bottom: 10px;">
+                                        <p:outputLabel value="Nombre:" for="nombre" />
+                                        <p:inputText id="nombre" value="#{aDClientes.cliente.nombre}" title="Nombre" />
+                                        <p:outputLabel value="Apellido:" for="apellido" />
+                                        <p:inputText id="apellido" value="#{aDClientes.cliente.apellido}" title="Apellido" />
+                                        <p:outputLabel value="Telefono:" for="telefono" />
+                                        <p:inputText id="telefono" value="#{aDClientes.cliente.telefono}" title="Telefono" />
+                                        <p:outputLabel value="Correo:" for="correo" />
+                                        <p:inputText id="correo" value="#{aDClientes.cliente.correo}" title="Correo" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+
+                                <!-- Botones de acción en el pie del diálogo -->
+                                <f:facet name="footer">
+                                    <p:commandButton value="Agregar" action="#{aDClientes.agregarClienteDialog}" styleClass="btn" />
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageClientDialog').hide()"
+                                                     class="ui-button-secondary" type="button" />
+                                </f:facet>
+                            </p:dialog>
                         </h:form>
                     </div>
                 </div>

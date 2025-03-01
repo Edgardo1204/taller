@@ -7,7 +7,6 @@ package admos;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
@@ -15,10 +14,6 @@ import manipuladatos.MDClientes;
 import modelo.Clientes;
 import org.primefaces.event.FlowEvent;
 
-/**
- *
- * @author Jesus
- */
 @Named(value = "aDClientes")
 @SessionScoped
 public class ADClientes implements Serializable {
@@ -27,23 +22,24 @@ public class ADClientes implements Serializable {
     private MDClientes mDClientes;
 
     private Clientes cliente = new Clientes();
-    private List<Clientes> clientes = null;
-    private String NombreC;
+    private List<Clientes> clientes;
+    private String nombreC;
     private List<Clientes> clientesFiltrados; // Lista temporal para almacenar clientes filtrados
     private boolean skip;
 
     /**
-     * Creates a new instance of ADClientes
+     * Constructor por defecto.
      */
     public ADClientes() {
         cliente = new Clientes();
     }
 
+    // Getters y Setters
     public Clientes getCliente() {
         return cliente;
     }
 
-    public void setClientes(Clientes cliente) {
+    public void setCliente(Clientes cliente) {
         this.cliente = cliente;
     }
 
@@ -55,22 +51,31 @@ public class ADClientes implements Serializable {
         return clientes;
     }
 
-    public MDClientes getmDClientes() {
+    public MDClientes getMDClientes() {
         return mDClientes;
     }
 
-    public void setmDClientes(MDClientes mDClientes) {
+    public void setMDClientes(MDClientes mDClientes) {
         this.mDClientes = mDClientes;
     }
 
     public String getNombreC() {
-        return NombreC;
+        return nombreC;
     }
 
-    public void setNombreC(String NombreC) {
-        this.NombreC = NombreC;
+    public void setNombreC(String nombreC) {
+        this.nombreC = nombreC;
     }
 
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    // Métodos de negocio
     public String agregarCliente() {
         try {
             mDClientes.insertarCliente(cliente);
@@ -82,9 +87,21 @@ public class ADClientes implements Serializable {
             return "errorPage";
         }
     }
+    
+        public String agregarClienteDialog() {
+        try {
+            mDClientes.insertarCliente(cliente);
+            clientes = mDClientes.obtenerCliente();
+            cliente = new Clientes();
+            return "hoja_serv?faces-redirect=true";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "errorPage";
+        }
+    }
 
-    public String eliminarCliente(Clientes cl) {
-        mDClientes.eliminarCliente(cl.getId());
+    public String eliminarCliente(Clientes cliente) {
+        mDClientes.eliminarCliente(cliente.getId());
         clientes = mDClientes.obtenerCliente();
         return "cliente?faces-redirect=true";
     }
@@ -101,9 +118,9 @@ public class ADClientes implements Serializable {
     }
 
     public void onClienteSelect() {
-        if (NombreC != null && !NombreC.isEmpty() && clientesFiltrados != null) {
+        if (nombreC != null && !nombreC.isEmpty() && clientesFiltrados != null) {
             cliente = clientesFiltrados.stream()
-                    .filter(c -> c.getNombre().equalsIgnoreCase(NombreC))
+                    .filter(c -> c.getNombre().equalsIgnoreCase(nombreC))
                     .findFirst()
                     .orElse(null);
         } else {

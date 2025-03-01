@@ -4,9 +4,12 @@
  */
 package datos;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import modelo.Clientes;
 import modelo.HojaServicio;
 
 /**
@@ -27,5 +30,18 @@ public class HojaServicioFacade extends AbstractFacade<HojaServicio> {
     public HojaServicioFacade() {
         super(HojaServicio.class);
     }
-    
+
+    public List<HojaServicio> getHojaServicioByIdCliente(Clientes p) {
+
+        try {
+            Query consultaup = em.createNamedQuery("HojaServicio.findByIdCliente");
+            consultaup.setParameter("idCliente", p);
+            List<HojaServicio> hojas = consultaup.getResultList();
+
+            return hojas;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

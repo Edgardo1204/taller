@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="primefaces"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../templates/navbar.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="card">
+                        <h:form>
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <p:wizard flowListener="#{aDClientes.onFlowProcess}">
+                                <p:tab id="cliente" title="Cliente">
+                                    <p:panel header="Datos del cliente">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <p:outputLabel value="Nombre: " for="@next"/>
+                                            <p:autoComplete id="dd" dropdown="true" value="#{aDClientes.nombreC}"
+                                                            completeMethod="#{aDClientes.completeText}" scrollHeight="250" required="true">
+                                                <p:ajax event="itemSelect" listener="#{aDClientes.onClienteSelect}" update="@form"/>
+                                            </p:autoComplete>
+
+                                            <h:outputText value="Apellido: *"/>
+                                            <p:inputText value="#{aDClientes.cliente.apellido}" label="Lastname" disabled="true"/>
+
+                                            <h:outputText value="Telefono:  "/>
+                                            <p:inputText value="#{aDClientes.cliente.telefono}" disabled="true"/>
+
+                                            <h:outputText value="Correo  "/>
+                                            <p:inputText value="#{aDClientes.cliente.correo}" disabled="true"/>
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="vehiculo" title="Vehiculo">
+                                    <p:panel header="Datos del vehiculo">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+
+                                            <p:outputLabel value="Cliente:" for="idCliente" />
+                                            <h:selectOneMenu id="idCliente" value="#{aDAutos.clienteFK}" > 
+                                                <f:selectItems value="#{aDClientes.clientes}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}"/>
+                                            </h:selectOneMenu>
+
+                                            <p:outputLabel value="Año:" for="año" />
+                                            <p:inputText id="año" value="#{aDAutos.auto.año}" title="Año" />
+                                            <p:outputLabel value="Km:" for="km" />
+                                            <p:inputText id="km" value="#{aDAutos.auto.km}" title="Km" />
+                                            <p:outputLabel value="Fecha de ingreso:" for="fechaIngreso" />
+                                            <p:calendar id="fechaIngreso" value="#{aDAutos.auto.fechaIngreso}"  
+                                                        title="FechaNac" 
+                                                        mode="popup" 
+                                                        showOn="button" 
+                                                        pattern="dd/MM/yyyy" 
+                                                        timeZone="America/Mexico_City" maxdate="today"/>
+                                            <p:outputLabel value="Marca:" for="marca" />
+                                            <p:inputText id="marca" value="#{aDAutos.auto.marca}" title="Marca" />
+                                            <p:outputLabel value="Modelo:" for="modelo" />
+                                            <p:inputText id="modelo" value="#{aDAutos.auto.modelo}" title="Modelo" />
+                                            <p:outputLabel value="Color:" for="color" />
+                                            <p:inputText id="color" value="#{aDAutos.auto.color}" title="Color" />
+                                            <p:outputLabel value="Placas:" for="placas" />
+                                            <p:inputText id="placas" value="#{aDAutos.auto.placas}" title="Placas" />
+                                            <p:outputLabel value="Vin:" for="vin" />
+                                            <p:inputText id="vin" value="#{aDAutos.auto.vin}" title="Vin" />
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="servicio" title="Servicio a realizar">
+                                    <p:panel header="Servicios a realizar">
+                                        <p:messages/>
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Email:"/>
+                                            <p:inputText value="#{userWizard.user.email}" required="true" label="Email"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="confirmacion" title="Confirmacion">
+                                    <p:panel header="Confirmacion">
+                                        <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Firstname: "/>
+                                                <h:outputText value="#{userWizard.user.firstname}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Lastname: "/>
+                                                <h:outputText value="#{userWizard.user.lastname}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Age: "/>
+                                                <h:outputText value="#{userWizard.user.age}" styleClass="outputLabel"/>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Street: "/>
+                                                <h:outputText value="#{userWizard.user.street}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Postal: "/>
+                                                <h:outputText value="#{userWizard.user.postalCode}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="City: "/>
+                                                <h:outputText value="#{userWizard.user.city}" styleClass="outputLabel"/>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Email: "/>
+                                                <h:outputText value="#{userWizard.user.email}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Phone "/>
+                                                <h:outputText value="#{userWizard.user.phone}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Info: "/>
+                                                <h:outputText value="#{userWizard.user.info}" styleClass="outputLabel"/>
+
+                                                <h:outputText/>
+                                                <h:outputText/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <p:commandButton value="Submit" action="#{userWizard.save}" update="growl" process="@this"/>
+
+                                    </p:panel>                                   
+                                </p:tab>
+                            </p:wizard>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -9,7 +9,7 @@ import modelo.Clientes;
 import modelo.DetalleServicio;
 import modelo.Empleado;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-02-27T22:05:21", comments="EclipseLink-2.7.12.v20230209-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2025-03-01T02:18:48", comments="EclipseLink-2.7.12.v20230209-rNA")
 @StaticMetamodel(HojaServicio.class)
 public class HojaServicio_ { 
 

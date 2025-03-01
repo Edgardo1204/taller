@@ -4,6 +4,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -40,23 +41,33 @@ public class ADServicios implements Serializable {
 
     @Inject
     private ADEmpleado aDEmpleado;
+    
+    @Inject
+    private ADAutos aDAutos;
 
     private List<Inventario> serviciosDisponibles;
     private List<Inventario> selectedServicios;
     private DetalleServicio detalleServ;
+    private HojaServicio hojaServicioGuardada;
+    private List<DetalleServicio> detallesGuardados;
 
     @PostConstruct
     public void init() {
         serviciosDisponibles = getServiciosDisponibles();
         selectedServicios = new ArrayList<>();
+        detallesGuardados = new ArrayList<>();
+
     }
 
     public List<Inventario> getServiciosDisponibles() {
         if (serviciosDisponibles == null) {
             serviciosDisponibles = mDInventario.obtenerInventario();
         }
+
         return serviciosDisponibles.stream()
-                .filter(i -> "Servicio".equalsIgnoreCase(i.getCategoria()))
+                .sorted(Comparator.comparing(
+                        i -> !"Servicio".equalsIgnoreCase(i.getTipo())
+                ))
                 .toList();
     }
 
@@ -74,6 +85,14 @@ public class ADServicios implements Serializable {
 
     public void setDetalleServ(DetalleServicio detalleServ) {
         this.detalleServ = detalleServ;
+    }
+
+    public HojaServicio getHojaServicioGuardada() {
+        return hojaServicioGuardada;
+    }
+
+    public List<DetalleServicio> getDetallesGuardados() {
+        return detallesGuardados;
     }
 
     public void guardarSelecciones() {
@@ -118,24 +137,25 @@ public class ADServicios implements Serializable {
             return null;
         }
 
-        // Buscar el objeto Empleado usando el ID seleccionado
         Empleado empleadoSeleccionado = aDEmpleado.buscarEmpleadoPorId(aDEmpleado.getIdEmpleadoSeleccionado());
         if (empleadoSeleccionado == null) {
             showMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Debe seleccionar un empleado válido");
             return null;
         }
 
-        // Crear y asignar la hoja de servicio
+        // Crear y guardar la hoja de servicio
         HojaServicio hojaServicio = new HojaServicio();
         hojaServicio.setFolio(aDHojaServicio.getUltimoFolio());
         hojaServicio.setIdCliente(aDClientes.getCliente());
-        hojaServicio.setIdEmpleado(empleadoSeleccionado); // Ahora asigna el objeto correcto
+        hojaServicio.setIdEmpleado(empleadoSeleccionado);
         hojaServicio.setFecha(aDHojaServicio.getFechaActual());
-        hojaServicio.setObservaciones("Observaciones del servicio");
+        hojaServicio.setObservaciones(aDHojaServicio.getHojaServicio().getObservaciones());
+        
 
         mDHojaServicio.insertarHojaServicio(hojaServicio);
 
-        // Insertar los detalles del servicio
+        // Guardar los detalles del servicio
+        List<DetalleServicio> detalles = new ArrayList<>();
         for (Inventario servicio : selectedServicios) {
             DetalleServicio detalleServicio = new DetalleServicio();
             detalleServicio.setIdHoja(aDHojaServicio.getUltimaHojaRegistrada());
@@ -144,11 +164,16 @@ public class ADServicios implements Serializable {
             detalleServicio.setPrecio(servicio.getPrecioVenta());
 
             mDDetalleServicio.insertarDetalleServicio(detalleServicio);
+            detalles.add(detalleServicio);
         }
 
+        // Almacenar datos para impresión
+        this.hojaServicioGuardada = hojaServicio;
+        this.detallesGuardados = detalles;
+        aDAutos.actualizarEstadoAuto(aDAutos.getAutoId(), false);
         showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Servicios guardados correctamente");
 
-        return null;
+        return "HojaServicioGen.xhtml?faces-redirect=true";  // Redirigir a la página de impresión
     }
 
     private boolean cantidadesValidas() {
@@ -169,6 +194,11 @@ public class ADServicios implements Serializable {
 
     private void showMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+
+    private void almacenarDatosParaImpresion(HojaServicio hojaServicio, List<DetalleServicio> detalles) {
+        this.hojaServicioGuardada = hojaServicio;
+        this.detallesGuardados = new ArrayList<>(detalles);
     }
 
 }

@@ -12,11 +12,7 @@ import javax.ejb.EJB;
 import manipuladatos.MDInventario;
 import modelo.Inventario;
 
-/**
- *
- * @author Jesus
- */
-@Named(value = "aDInventaro")
+@Named(value = "aDInventario")
 @SessionScoped
 public class ADInventario implements Serializable {
 
@@ -24,16 +20,17 @@ public class ADInventario implements Serializable {
     private MDInventario mDInventario;
 
     private Inventario inventario = new Inventario();
-    private List<Inventario> inv = null;
+    private List<Inventario> inventarios;
     private String mensajeRegistro;
 
     /**
-     * Creates a new instance of ADInventaro
+     * Constructor por defecto.
      */
     public ADInventario() {
         inventario = new Inventario();
     }
 
+    // Getters y Setters
     public Inventario getInventario() {
         return inventario;
     }
@@ -43,34 +40,10 @@ public class ADInventario implements Serializable {
     }
 
     public List<Inventario> getInventarios() {
-        if (inv == null) {
-            inv = mDInventario.obtenerInventario();
+        if (inventarios == null) {
+            inventarios = mDInventario.obtenerInventario();
         }
-        return inv;
-    }
-
-    public String agregarInventario() {
-        try {
-            mensajeRegistro = "Producto o servicio registrado con éxito.";
-            mDInventario.insertarInventario(inventario);
-            inv = mDInventario.obtenerInventario();
-            inventario = new Inventario();
-            return "inventarios?faces-redirect=true";
-        } catch (Exception e) {
-            mensajeRegistro = "Error al registrar el producto o servicio.";
-            return "inventarios?faces-redirect=true";
-        }
-    }
-
-    public String eliminarInventario(Inventario inve) {
-        mDInventario.eliminarInventario(inve.getId());
-        inv = mDInventario.obtenerInventario();
-        return "inventarios?faces-redirect=true";
-    }
-
-    public void actualizarCampos() {
-        // Lógica adicional si es necesaria
-        System.out.println("Categoría seleccionada: " + inventario.getCategoria());
+        return inventarios;
     }
 
     public String getMensajeRegistro() {
@@ -81,13 +54,37 @@ public class ADInventario implements Serializable {
         this.mensajeRegistro = mensajeRegistro;
     }
 
-    public List<Inventario> getServicios() {
-        if (inv == null) {
-            inv = mDInventario.obtenerInventario();
+    // Métodos de negocio
+    public String agregarInventario() {
+        try {
+            mDInventario.insertarInventario(inventario);
+            inventarios = mDInventario.obtenerInventario();
+            inventario = new Inventario();
+            mensajeRegistro = "Producto o servicio registrado con éxito.";
+            return "inventarios?faces-redirect=true";
+        } catch (Exception e) {
+            mensajeRegistro = "Error al registrar el producto o servicio.";
+            return "inventarios?faces-redirect=true";
         }
-        return inv.stream()
-                .filter(i -> "Servicio".equalsIgnoreCase(i.getCategoria()))
-                .toList();
     }
 
+    public String eliminarInventario(Inventario inventario) {
+        mDInventario.eliminarInventario(inventario.getId());
+        inventarios = mDInventario.obtenerInventario();
+        return "inventarios?faces-redirect=true";
+    }
+
+    public void actualizarCampos() {
+        // Lógica adicional si es necesaria
+        System.out.println("Categoría seleccionada: " + inventario.getCategoria());
+    }
+
+    public List<Inventario> getServicios() {
+        if (inventarios == null) {
+            inventarios = mDInventario.obtenerInventario();
+        }
+        return inventarios.stream()
+                .filter(i -> "Servicio".equalsIgnoreCase(i.getTipo()))
+                .toList();
+    }
 }

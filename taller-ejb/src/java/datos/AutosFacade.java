@@ -4,10 +4,13 @@
  */
 package datos;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import modelo.Autos;
+import modelo.Clientes;
 
 /**
  *
@@ -27,5 +30,18 @@ public class AutosFacade extends AbstractFacade<Autos> {
     public AutosFacade() {
         super(Autos.class);
     }
-    
+
+    public List<Autos> getAutosByIdCliente(Clientes c) {
+
+        try {
+            Query consultaup = em.createNamedQuery("Autos.findByIdCliente");
+            consultaup.setParameter("idCliente", c);
+            List<Autos> autos = consultaup.getResultList();
+
+            return autos;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

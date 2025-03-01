@@ -19,6 +19,7 @@
             <ui:insert name="top">
                 <div class="navbar">
                     <div class="company-name">QUICK LUB</div>
+                    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
                     <div class="user-info">Usuario</div>
                 </div>
             </ui:insert>
@@ -26,12 +27,24 @@
         <div>
             <div id="left">
                 <ui:insert name="left">
-                    <div class="sidebar">
+                    <div class="sidebar" id="sidebar">
                         <ul>
                             <li><h:link value="inicio" outcome="index" /></li>
                             <li><h:link value="inventario" outcome="inventarios" /></li>
                             <li><h:link value="cliente" outcome="cliente" /></li>
                         </ul>
+                        <h:form>
+                            <p:growl>
+                                <p:autoUpdate/>
+                            </p:growl>
+
+                            <p:panelMenu>
+                                <p:submenu label="Hoja de pago">
+                                    <p:menuitem value="Generar" outcome="generar_pagos" icon="fa fa-history" class="btn-icon"/>
+                                    <p:menuitem value="Historial" outcome="historial_pagos" icon="fa fa-usd" class="btn-icon"/>
+                                </p:submenu>
+                            </p:panelMenu>
+                        </h:form>
                     </div>
                 </ui:insert>
             </div>
@@ -42,5 +55,13 @@
         <div id="bottom">
             <ui:insert name="bottom">Bottom</ui:insert>
         </div>
+
+        <!-- Añadir el script aquí -->
+        <script>
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('active');
+            }
+        </script>
     </h:body>
 </html>

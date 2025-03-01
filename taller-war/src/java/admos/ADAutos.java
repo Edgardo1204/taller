@@ -22,18 +22,18 @@ public class ADAutos implements Serializable {
     private MDAutos mDAutos;
 
     private Autos auto = new Autos();
-    private List<Autos> autos = null;
-    private int clienteFK = 0;
-    private String autoC;
+    private List<Autos> autos;
+    private int clienteFK;
     private Integer autoId; // ID del auto seleccionado
 
     /**
-     * Creates a new instance of ADClientes
+     * Constructor por defecto.
      */
     public ADAutos() {
         auto = new Autos();
     }
 
+    // Getters y Setters
     public Autos getAuto() {
         return auto;
     }
@@ -52,39 +52,11 @@ public class ADAutos implements Serializable {
         return autos;
     }
 
-    public String agregarAuto(ADClientes aDClientes) {
-        System.out.println("No entra ni al perro try catch alv ptm");
-        try {
-            auto.setIdCliente(aDClientes.getClienteId(clienteFK));
-            mDAutos.insertarAuto(auto);
-            autos = mDAutos.obtenerAutos();
-            auto = new Autos();
-            clienteFK = 0;
-            System.out.println("No vale verga");
-            return "auto?faces-redirect=true";
-        } catch (Exception e) {
-            System.out.println("No se que verga pero nomas entra aqui alv ptm madre");
-            e.printStackTrace();
-            return "errorPage";
-        }
-    }
-
-    public String eliminarAuto(Autos cl) {
-        mDAutos.eliminarAuto(cl.getId());
-        autos = mDAutos.obtenerAutos();
-        return "auto?faces-redirect=true";
-    }
-
-    public void registroAuto() {
-        mDAutos.insertarAuto(auto);
-
-    }
-
-    public MDAutos getmDAutos() {
+    public MDAutos getMDAutos() {
         return mDAutos;
     }
 
-    public void setmDAutos(MDAutos mDAutos) {
+    public void setMDAutos(MDAutos mDAutos) {
         this.mDAutos = mDAutos;
     }
 
@@ -104,6 +76,48 @@ public class ADAutos implements Serializable {
         this.autoId = autoId;
     }
 
+    // Métodos de negocio
+    public String agregarAuto(ADClientes aDClientes) {
+        try {
+            auto.setIdCliente(aDClientes.getClienteId(clienteFK));
+            auto.setEstado(true);
+            mDAutos.insertarAuto(auto);
+            autos = mDAutos.obtenerAutos();
+            auto = new Autos();
+            clienteFK = 0;
+            return "auto?faces-redirect=true";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "errorPage";
+        }
+    }
+
+    public String agregarAutoDialog(ADClientes aDClientes) {
+        try {
+            auto.setIdCliente(aDClientes.getClienteId(clienteFK));
+            auto.setEstado(true);
+            mDAutos.insertarAuto(auto);
+            autos = mDAutos.obtenerAutos();
+            auto = new Autos();
+            clienteFK = 0;
+            return "hoja_serv?faces-redirect=true";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "errorPage";
+        }
+    }
+
+    public String eliminarAuto(Autos auto) {
+        mDAutos.eliminarAuto(auto.getId());
+        autos = mDAutos.obtenerAutos();
+        return "auto?faces-redirect=true";
+    }
+
+    public void registroAuto() {
+        auto.setEstado(Boolean.TRUE);
+        mDAutos.insertarAuto(auto);
+    }
+
     public List<Autos> obtenerAutosPorClienteId(int clienteId) {
         System.out.println("Buscando autos para cliente ID: " + clienteId);
         List<Autos> todosLosAutos = mDAutos.obtenerAutos();
@@ -114,18 +128,51 @@ public class ADAutos implements Serializable {
 
     private List<Autos> filtrarAutosPorClienteId(List<Autos> autos, int clienteId) {
         return autos.stream()
-                .filter(auto -> auto.getIdCliente() != null && auto.getIdCliente().getId() == clienteId)
+                .filter(auto -> auto.getIdCliente() != null
+                && auto.getIdCliente().getId() == clienteId
+                && auto.getEstado() == true) // Filtra solo los autos con estado true
                 .collect(Collectors.toList());
     }
 
     public void onAutoSelect() {
         if (autoId != null) {
-            // Busca el auto por su ID
             auto = mDAutos.obtenerAutoPorId(autoId);
             System.out.println("Auto seleccionado: " + auto.getModelo());
         } else {
-            // Si no hay ID seleccionado, limpia los campos
             auto = new Autos();
+        }
+    }
+
+    public String actualizarEstadoAuto(int autoId, boolean nuevoEstado) {
+        try {
+            Autos autoActualizar = mDAutos.obtenerAutoPorId(autoId);
+            if (autoActualizar != null) {
+                autoActualizar.setEstado(nuevoEstado);
+                mDAutos.actualizarAuto(autoActualizar);
+                autos = mDAutos.obtenerAutos(); // Refrescar la lista de autos
+                return "auto?faces-redirect=true"; // Redirigir tras la actualización
+            } else {
+                System.out.println("No se encontró el auto con ID: " + autoId);
+                return "errorPage";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "errorPage";
+        }
+    }
+
+    public List<Autos> buscarAutosPorCliente(Clientes clienteId) {
+        try {
+            List<Autos> autosCliente = mDAutos.getAutosByIdClientes(clienteId);
+            if (autosCliente.isEmpty()) {
+                System.out.println("No se encontraron autos para el cliente con ID: " + clienteId);
+            } else {
+                System.out.println("Autos encontrados para el cliente ID " + clienteId + ": " + autosCliente.size());
+            }
+            return autosCliente;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

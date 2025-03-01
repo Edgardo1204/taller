@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import modelo.Clientes;
 import modelo.HojaServicio;
 
 /**
@@ -49,5 +50,9 @@ public class MDHojaServicio {
             hojaServicioF.remove(hoja);
 
         }
+    }
+
+    public List<HojaServicio> getHojasByIdCliente(Clientes x) {
+        return hojaServicioF.getHojaServicioByIdCliente(x);
     }
 }
